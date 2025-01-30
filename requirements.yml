@@ -1,0 +1,5 @@
+---
+- src: git+https://github.com/drumspb/ansible_role_unbound
+  version: master
+  name: ansible_role_unbound
+
