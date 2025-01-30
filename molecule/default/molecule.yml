@@ -24,11 +24,7 @@ provisioner:
 
 verifier:
   name: ansible  # Отключаем Testinfra, оставляем пустой Verifier
-
-scenario:
-  name: default
-  prepare: {}
-  cleanup: {}          
+       
 
 
 
