@@ -1,4 +1,5 @@
-- name: Test role
+---
+- name: Converge
   hosts: all
   roles:
-    - ansible_role_unbound
+    - role: ansible_role_unbound
