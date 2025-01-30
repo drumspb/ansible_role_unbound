@@ -7,9 +7,9 @@ driver:
 
 platforms:
   - name: instance
-    groups:
-      - test
-    ansible_connection: local  # Подключение как к локальному хосту
+    image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    privileged: true
+    pre_build_image: true
 
 verifier:
   name: testinfra
@@ -21,3 +21,6 @@ provisioner:
       all:
         roles_path:
           - ../../  # Указываем путь к корню проекта  
+
+
+
