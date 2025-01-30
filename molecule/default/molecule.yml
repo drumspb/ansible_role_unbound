@@ -1,0 +1,20 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker 
+
+platforms:
+  - name: instance
+    groups:
+      - test
+    ansible_connection: local  # Подключение как к локальному хосту
+
+provisioner:
+  name: ansible
+  playbooks:
+    converge: playbook.yml
+
+verifier:
+  name: testinfra
