@@ -7,7 +7,7 @@ node {
     ])
 
     // Установка необходимых переменных
-    def playbookPath = 'path/to/your/playbook.yml' // Укажите путь к вашему playbook
+    def playbookPath = 'playbook.yml' // Укажите путь к вашему playbook
     def command = "ansible-playbook ${playbookPath}"
 
     // Проверяем параметр prod_run
