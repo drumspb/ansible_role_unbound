@@ -1,0 +1,5 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - drumspb.unbound  # Укажите имя роли, как указано в вашем репозитории
