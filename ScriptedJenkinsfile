@@ -1,0 +1,32 @@
+node {
+    // Параметризованный Build
+    properties([
+        parameters([
+            booleanParam(name: 'prod_run', defaultValue: false, description: 'Запускать ansible-playbook без флагов --check --diff')
+        ])
+    ])
+
+    // Установка необходимых переменных
+    def playbookPath = 'path/to/your/playbook.yml' // Укажите путь к вашему playbook
+    def command = "ansible-playbook ${playbookPath}"
+
+    // Проверяем параметр prod_run
+    if (params.prod_run) {
+        // Если prod_run = true, запускаем playbook без флагов --check --diff
+        echo "Запуск playbook в режиме продакшн"
+    } else {
+        // Если prod_run = false, запускаем playbook с флагами --check --diff
+        command += ' --check --diff'
+        echo "Запуск playbook в режиме проверки"
+    }
+    
+    // Выполнение команды
+    try {
+        echo "Выполнение команды: ${command}"
+        sh command
+    } catch (Exception e) {
+        echo "Ошибка при выполнении playbook: ${e.message}"
+        currentBuild.result = 'FAILURE'
+        error("Pipeline завершился с ошибкой")
+    }
+}
