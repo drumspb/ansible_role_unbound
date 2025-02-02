@@ -6,27 +6,26 @@ node {
         ])
     ])
 
-    // Установка необходимых переменных
-    def playbookPath = 'playbook.yml' // Укажите путь к вашему playbook
-    def command = "ansible-playbook ${playbookPath}"
-
-    // Проверяем параметр prod_run
-    if (params.prod_run) {
-        // Если prod_run = true, запускаем playbook без флагов --check --diff
-        echo "Запуск playbook в режиме продакшн"
-    } else {
-        // Если prod_run = false, запускаем playbook с флагами --check --diff
-        command += ' --check --diff'
-        echo "Запуск playbook в режиме проверки"
+    dir('/opt/jenkins_agent/workspace/MoleculeTest') {
+        // Проверка, существует ли директория ansible_role_unbound
+        if (!fileExists("ansible_role_unbound")) {
+            // Если директория не существует, клонируем репозиторий
+            git url: 'https://github.com/drumspb/ansible_role_unbound', branch: 'main'
+        } else {
+            // Если директория существует, просто обновляем её
+            dir('ansible_role_unbound') {
+                sh 'git pull'
+            }
+        }
     }
-    
+
     // Выполнение команды
-    try {
-        echo "Выполнение команды: ${command}"
-        sh command
-    } catch (Exception e) {
-        echo "Ошибка при выполнении playbook: ${e.message}"
-        currentBuild.result = 'FAILURE'
-        error("Pipeline завершился с ошибкой")
+    dir('/opt/jenkins_agent/workspace/MoleculeTest/ansible_role_unbound') {
+        // Установка зависимостей и запуск тестов
+        if (params.prod_run) {
+            sh 'molecule test --no-check --no-diff'
+        } else {
+            sh 'molecule test'
+        }
     }
 }
